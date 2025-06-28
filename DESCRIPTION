@@ -1,0 +1,15 @@
+Package: DILDEGMEZ
+Title: Yapı Geçerliği Metrikleri (AVE, CR, HTMT)
+Version: 0.1.0
+Authors@R: 
+    person("BAHTIYAR", "DILDEGMEZ",
+           email = "bahtiyardildegmez09@gmail.com", role = c("aut", "cre"))
+Description: Tek faktörlü ML faktör analizi temelinde AVE, Composite Reliability
+    (CR) ve Heterotrait–Monotrait (HTMT) oranını hesaplar.
+License: MIT + file LICENSE
+Encoding: UTF-8
+R: >= 4.2.0
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Suggests: knitr, rmarkdown, quarto, testthat (>= 3.0.0)
+Config/testthat/edition: 3

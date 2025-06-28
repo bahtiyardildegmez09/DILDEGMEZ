@@ -1,0 +1,95 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+# 1) Gerekli paketleri kur ve yükle
+install.packages(c("usethis", "devtools", "testthat"))  # usethis/devtools/testthat kurar
+library(usethis)     # paket iskeleti, Git/GitHub, DESCRIPTION, test altyapısı için
+library(devtools)    # document(), load_all(), check(), install() vb. fonksiyonlar
+library(testthat)    # testthat altyapısı
+
+# 2) Mevcut projeyi paket iskeletine dönüştür
+usethis::create_package(".", open = FALSE)
+#   — içinde bulunduğun dizini R paketi haline getirir (.Rproj, R/, DESCRIPTION vs.)
+
+# 3) DESCRIPTION dosyasını doldur
+usethis::use_description(fields = list(
+  Package      = "DILDEGMEZ",    # paket adı
+  Title        = "Yapı Geçerliği Metrikleri (AVE, CR, HTMT)",  # kısa başlık
+  Version      = "0.0.0.9000",   # sürüm
+  `Authors@R`  = 'person("BAHTIYAR", "DILDEGMEZ", email = "bahtiyardildegmez09@gmail.com", role = c("aut", "cre"))',
+  Description  = "Tek faktörlü ML faktör analizi temelinde AVE, Composite Reliability (CR) ve HTMT oranını hesaplar.",
+  License      = "MIT + file LICENSE",  # lisans
+  Encoding     = "UTF-8",               # dosya kodlaması
+  `R`          = ">= 4.2.0"             # gereken R sürümü
+))
+#   — DESCRIPTION dosyasına meta‐veri olarak ekler
+
+# 4) Lisans dosyasını ekle
+usethis::use_mit_license("Bahtiyar Dildegmez")
+#   — köke LICENSE dosyası yazar
+
+# 5) Ana işlev dosyasını oluştur
+usethis::use_r("metrics")
+#   — R/metrics.R dosyasını açar
+
+# (Artık R/metrics.R içinde metrics() fonksiyonunu roxygen2 ile yazıp kaydet)
+
+# 6) Paketini yükle ve hızlı test et
+devtools::load_all()  
+#   — paketi install etmeden belleğe yükler, metrics(df, mod) gibi denemeler yapabilirsin
+
+# 7) Örnek veriyle çıktı al
+set.seed(123)
+df <- data.frame(
+  A1 = rnorm(200), A2 = rnorm(200), A3 = rnorm(200),
+  T1 = rnorm(200), T2 = rnorm(200), T3 = rnorm(200)
+)
+mod <- list(Algi = c("A1","A2","A3"), Tutum = c("T1","T2","T3"))
+metrics(df, mod)  
+#   — metrics() fonksiyonunun çıktısını konsolda görürsün
+
+# 8) testthat altyapısını oluştur
+usethis::use_testthat()          # tests/testthat/ dizini yaratır
+usethis::use_test("metrics")     # tests/testthat/test-metrics.R dosyasını açar
+
+# (tests/testthat/test-metrics.R içinde örnek testleri ekle ve kaydet)
+
+# 9) Testleri çalıştır
+devtools::test()                 # sadece test dosyalarını çalıştırır
+
+# 10) Gereksiz dosyaları derlemeye dahil etme
+usethis::use_build_ignore(c("xxx.Rmd", "xxx.nb.html"))
+#   — bu iki dosya paket arşivine *aslında zaten girmez*, ama not almak istersen
+
+# 11) Paketi CRAN standardına göre derle & kontrol et
+devtools::check()                # R CMD build & check
+# veya
+devtools::install()              # sadece yerel kurulum testi
+
+# 12) Belgeleri yeniden oluştur & tekrar kontrol
+devtools::document()             # man/ ve NAMESPACE günceller
+devtools::check()                # değişikliklerden sonra son bir check
+
+# 13) (İsteğe bağlı) Quarto uyarılarını sessize alma
+usethis::edit_r_profile(scope = "user")
+# açılan ~/.Rprofile içine:
+# options(pkgbuild.quiet_quarto = TRUE)
+# yazıp kaydet → RStudio’yu yeniden başlat
+
+# 14) Sessize alındığını kontrol et
+getOption("pkgbuild.quiet_quarto")  # TRUE dönerse Quarto sorgusu gizlenir
+
+#Bu komutlar sizi otomatik olarak yeni açılan editör penceresine götürür.
+usethis::use_news_md()
+usethis::use_readme_md(open = TRUE)
+
+```
+
+
+```{r}
+
+```
+
