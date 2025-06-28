@@ -40,3 +40,4 @@ result <- metrics(df, model)
 print(result$AVE)
 print(result$CR)
 print(result$HTMT)
+"# DILDEGMEZ" 
