@@ -1,13 +1,16 @@
-#’ Ölçme Modeli Metrikleri (AVE, CR, HTMT) — ML ve WLSMV
-#’
-#’ Sürekli veriler için ML (stats::factanal) veya ordinal veriler için
-#’ WLSMV (lavaan + semTools) ile AVE, CR, √AVE ve HTMT hesaplar.
-#’
-#’ @param data Veri çerçevesi veya matris; sütunlar gözlenen değişkenler.
-#’ @param model İsimli liste: her öğe bir faktör adı, değeri o faktörün madde isimleri.
-#’ @param method Karakter; “ML” (varsayılan) veya “WLSMV”.
-#’ @return Tibble (faktör başına bir satır) ve öznitelik `"HTMT"`’de HTMT matrisi.
-#’ @export
+#' Ölçme Modeli Metrikleri (AVE, CR, HTMT) — ML ve WLSMV
+#'
+#' Sürekli veriler için ML (stats::factanal) veya ordinal veriler için
+#' WLSMV (lavaan + semTools) ile AVE, CR, √AVE ve HTMT hesaplar.
+#'
+#' @param data Veri çerçevesi veya matris; sütunlar gözlenen değişkenler.
+#' @param model İsimli liste: her öğe bir faktör adı, değeri o faktörün madde isimleri.
+#' @param method Karakter; “ML” (varsayılan) veya “WLSMV”.
+#' @return Tibble (faktör başına bir satır) ve öznitelik `"HTMT"`’de HTMT matrisi.
+#' @importFrom stats factanal cor
+#' @importFrom tibble tibble
+#' @importFrom dplyr bind_rows
+#' @export
 metrics <- function(data, model, method = c("ML","WLSMV")) {
   method <- match.arg(method)
   data   <- as.data.frame(data)
@@ -16,7 +19,8 @@ metrics <- function(data, model, method = c("ML","WLSMV")) {
 
   check_pkg <- function(pkg) {
     if (!requireNamespace(pkg, quietly = TRUE)) {
-      stop(sprintf("'%s' paketi yüklü olmalı for method = \"%s\".", pkg, method), call. = FALSE)
+      stop(sprintf("'%s' paketi yüklü olmalı for method = \"%s\".", pkg, method),
+           call. = FALSE)
     }
   }
 
@@ -40,7 +44,7 @@ metrics <- function(data, model, method = c("ML","WLSMV")) {
       fit  <- lavaan::cfa(
         model   = form, data      = data,
         estimator = "WLSMV", std.lv = TRUE,
-         missing   = "pairwise"
+        missing   = "pairwise"
       )
       ss   <- lavaan::standardizedSolution(fit)
       lam  <- ss$est.std[ ss$op == "=~" & ss$lhs == facs[i] ]

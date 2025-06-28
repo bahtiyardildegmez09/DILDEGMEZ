@@ -2,32 +2,21 @@
 % Please edit documentation in R/metrics.R
 \name{metrics}
 \alias{metrics}
-\title{Measurement Model Metrics (AVE, CR, HTMT)}
+\title{Ölçme Modeli Metrikleri (AVE, CR, HTMT) — ML ve WLSMV}
 \usage{
-metrics(data, model)
+metrics(data, model, method = c("ML", "WLSMV"))
 }
 \arguments{
-\item{data}{A data frame or matrix of observed variables.}
+\item{data}{Veri çerçevesi veya matris; sütunlar gözlenen değişkenler.}
 
-\item{model}{A named list: each element name is a factor, value is a character vector of variable names.}
+\item{model}{İsimli liste: her öğe bir faktör adı, değeri o faktörün madde isimleri.}
+
+\item{method}{Karakter; “ML” (varsayılan) veya “WLSMV”.}
 }
 \value{
-A list with components:
-\itemize{
-\item AVE: numeric vector of AVE values.
-\item CR: numeric vector of composite reliability values.
-\item HTMT: square matrix of HTMT ratios.
-}
+Tibble (faktör başına bir satır) ve öznitelik \code{"HTMT"}’de HTMT matrisi.
 }
 \description{
-Calculate Average Variance Extracted (AVE), Composite Reliability (CR),
-and Heterotrait–Monotrait ratio (HTMT) using base R.
-}
-\examples{
-df <- data.frame(
-  A1 = rnorm(100), A2 = rnorm(100), A3 = rnorm(100),
-  T1 = rnorm(100), T2 = rnorm(100), T3 = rnorm(100)
-)
-mod <- list(Algi = c("A1","A2","A3"), Tutum = c("T1","T2","T3"))
-metrics(df, mod)
+Sürekli veriler için ML (stats::factanal) veya ordinal veriler için
+WLSMV (lavaan + semTools) ile AVE, CR, √AVE ve HTMT hesaplar.
 }
